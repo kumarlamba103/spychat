@@ -1,3 +1,6 @@
-spy_name="vikas"
-spy_age=24
-spy_rating=4
+spy = {
+    'name':'vikas',
+    'age':23,
+    'rating':4,
+    'is_online':True
+}
