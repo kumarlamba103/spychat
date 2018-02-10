@@ -1,4 +1,11 @@
+#import spy details from spy_details.py
 from spy_details import spy
+
+#import steganography class from python library
+
+
+#from datetime library import date-time
+from datetime import datetime
 
 print"Hello!!"
 print"Welcome to Spychat"
@@ -63,12 +70,45 @@ def select_a_friend():
     user_selected_friend = input("select your friend")
     user_index =int(user_selected_friend) - 1
     return user_index
+def send_message():
+    user_friend_index = select_a_friend()
+    original_image = raw_input("What is the name of your image? ")
+    text = raw_input("What is your secret message? ")
+    output_path = 'output.jpg'
+    # use of steganography library function encode to encode a message in image
+    Steganography.encode(original_image, output_path, text)
+    new_chat = {
+        "message": text,
+        "time": datetime.now(),
+        "sent_by_me": True
+    }
+    # append new_chat to friends list
+    friends[user_friend_index]['chats'].append(new_chat)
+    print "Your secret message is ready!!!"
+
+def read_message():
+    sender = select_a_friend()
+    output_path = raw_input("What is the name of your encrypted file? ")
+    # use decode() function of steganography library to decode the encoded message
+    Decrypted_text = Steganography.decode(output_path)
+
+    new_chat = {
+        "message": Decrypted_text,
+        "time": datetime.now(),
+        "sent_by_me": False
+    }
+    print "Your secret message is:" + Decrypted_text
+
+    friends[sender]['chats'].append(new_chat)
+    print "Your secret message has been saved!"
+
+
 
 def start_chat(spy_name,spy_age,spy_rating):
     current_status_message = None
     show_menu = True
     while show_menu:
-        menu_choice=input("What do you want to do? \n 1. Add a status update\n!2.Add a friend \n 3.Send a message\n 0. Exit :: \n")
+        menu_choice=input("What do you want to do? \n 1. Add a status update\n!2.Add a friend \n 3.Send a message\n 4.Read a message.\n 5.Read chat history\n 0. Exit :: \n")
 
         if(menu_choice == 1):
            current_status_message = add_status( current_status_message)
@@ -84,6 +124,9 @@ def start_chat(spy_name,spy_age,spy_rating):
             print"you have" + str(no_of_frnds) + "of friends"
         elif menu_choice == 3:
             user_friend=select_a_friend()
+        elif menu_choice == 4:
+            read_message()
+
         elif menu_choice == 0:
             show_menu = False
         else:
