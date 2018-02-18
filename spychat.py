@@ -36,6 +36,7 @@ def load_friends():
                 spy = Spy(name, age, rating,online )
                 friends.append(spy)
 
+#====================================================================================================
 def load_chats():
     with open('chats.csv','rb') as chats_data:
         reader = list(csv.reader(chats_data))
@@ -51,7 +52,7 @@ def load_chats():
 load_friends()
 #===============================================================================================
 
-#===============================================================================
+#===============================================================================================
 #define add status() function with parameters
 def add_status(current_status_message):
     if current_status_message != None:
@@ -114,7 +115,7 @@ def add_friend():
         print"Sorry friend cannot be added......"
     return len(friends)
 
-#==============================================================================================
+#===================================================================================================
 # define select_a_friend() function to select a friend from choices given
 
 def select_a_friend():
@@ -125,6 +126,8 @@ def select_a_friend():
     user_selected_friend = input("select your friend")
     user_index =user_selected_friend - 1
     return user_index
+
+#=================================================================================================
 
 # define send_message() function to send secret message to someone
 def send_message():
@@ -147,6 +150,8 @@ def send_message():
     print "The image is saved "+ output_path + " name . "
 #Function defines for read the secret message
 
+#===========================================================================================================
+
 
 def send_help_message():
     # Selecting a friend
@@ -157,6 +162,9 @@ def send_help_message():
     new_chat = ChatMessage((text,),False)
     # Appending the chat
     friends[friend_choice].chats.append(new_chat)
+
+
+#========================================================================================================
 
 
 def read_message():
@@ -251,11 +259,11 @@ def remove_friend():                                         # Friend is removed
     print ("Friend has been removed !")
     # Displaying number of friends left after removal
     return len(friends)
+#===============================================
 
 
 
-
-
+# starts the spychat application
 def start_chat(spy_name,spy_age,spy_rating):
     current_status_message = None
     show_menu = True
