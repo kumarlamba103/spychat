@@ -1,21 +1,30 @@
+#imports details from spy_details
 from spy_details import spy
-
-
 from spy_details import Spy, ChatMessage
-
 from steganography.steganography import Steganography
 
 import time
 
 import csv
-
+#Welcome message
 print"\033[1;31m Hello\033[1;m"
 print"\033[1;31m Welcome to Spychat\033[1;m"
 print"\033[1;31m Let\'s get started\033[1;m"
 
 
+
+# displayed given status
+STATUS_MESSAGES = ['I\'m in Gym','Sleeping','Busy']
+friends = []
+new_chat =[]
+
+
+#====================================================================================================
+
 def load_friends():
+
     with open('friends.csv', 'rb') as friends_data:
+
         reader = list(csv.reader(friends_data))
 
         for row in reader[1:]:
@@ -23,18 +32,26 @@ def load_friends():
                 name = row[0]
                 age = row[1]
                 rating = row[2]
-            spy = Spy(name, age, rating)
-            friends.append(spy)
+                online = row[3]
+                spy = Spy(name, age, rating,online )
+                friends.append(spy)
 
+def load_chats():
+    with open('chats.csv','rb') as chats_data:
+        reader = list(csv.reader(chats_data))
 
+        for row in reader[1:]:
+            if row:
+                sender = row[0]
+                message_sent_to = row[1]
+                text = row[2]
+                time =[3]
+                sent_by_me = row[4]
+                chats.append(new_chat)
+load_friends()
+#===============================================================================================
 
-
-STATUS_MESSAGES = ['I\'m in Gym','Sleeping','Busy']
-friends = []
-new_chats =[]
-chats =[]
-
-
+#===============================================================================
 #define add status() function with parameters
 def add_status(current_status_message):
     if current_status_message != None:
@@ -74,11 +91,11 @@ def add_status(current_status_message):
 
 
 
-
+#==========================================================================================
 # define add friend() function to add a friend
 def add_friend():
 
-    new_friend = Spy("",0,0.0)
+    new_friend = Spy("",0,0.0,True)
 
     new_friend.name=raw_input("what is the name of frnd")
     new_friend.age=input("what is the age of frnd")
@@ -96,12 +113,14 @@ def add_friend():
 
         print"Sorry friend cannot be added......"
     return len(friends)
+
+#==============================================================================================
 # define select_a_friend() function to select a friend from choices given
 
 def select_a_friend():
     serial_no = 1
-    for new_friend in friends:
-        print str(serial_no) + " " + new_friend['name']
+    for friend in friends:
+        print str(serial_no) + " " + friend.name
         serial_no = serial_no + 1
     user_selected_friend = input("select your friend")
     user_index =user_selected_friend - 1
@@ -115,7 +134,7 @@ def send_message():
     output_path =raw_input("Enter the name of your secret message image")
     # use of steganography library function encode to encode a message in image
     Steganography.encode(original_image, output_path, text)
-    new_chat = ChatMessage(text,sent_by_me)
+    new_chat = ChatMessage(text,True)
 
     with open('chats.csv', 'ab') as chats_data:
         write = csv.writer(chats_data)
@@ -123,7 +142,7 @@ def send_message():
 
 
     # append new_chat to friends list
-    user_index.chats.append(new_chat)
+    friends[user_index].chats.append(new_chat)
     print "Your secret message is ready!!!"
     print "The image is saved "+ output_path + " name . "
 #Function defines for read the secret message
@@ -133,30 +152,72 @@ def send_help_message():
     # Selecting a friend
     friend_choice = select_a_friend()
     # The response
-    text = ("Don't worry... I'm coming to save you!","magenta")
+    text = ("Don't worry... I'm coming to save you!")
     # Creating new chat
     new_chat = ChatMessage((text,),False)
     # Appending the chat
     friends[friend_choice].chats.append(new_chat)
 
 
-
 def read_message():
+    # Selecting the friend
     sender = select_a_friend()
-    output_path = raw_input("What is the name of your encrypted file? ")
-    # use decode() function of steganography library to decode the encoded message
-    secret_text = Steganography.decode(output_path)
-    print secret_text
+    # Asking the name of image from where secret message is to be decoded
+    output_path = raw_input("What is the name of the file you want to decode? ")
 
-    new_chat = {
-        "message":'text',
-        "time": datetime.now(),
-        "sent_by_me": False
-    }
+    try:
+        # Using decode() funtion with file name of encrypted message as parameter
+        secret_text = Steganography.decode(output_path)
+        print ("Your secret message is:")
+        print (secret_text)
 
-    friends[sender]['chats'].append(new_chat)
-    print "Your secret message is:" + secret_text
-    print "Your secret message has been saved!"
+        # Converting secret_text to uppercase
+        new_text = (secret_text.upper()).split()
+
+        # Checking emergency templates for help
+        if 'SOS' in new_text or 'SAVE ME'in new_text or 'HELP ME' in new_text or 'ALERT' in new_text or 'RESCUE' in new_text or 'ACCIDENT' in new_text:
+
+            # Emergency alert
+            print "!"
+            print "!"
+            print "!"
+
+            print "The friend who sent this message needs your help!"
+            print "Please help your friend by sending a helping message...\n"
+            print "Select the friend to send a helping message.\n"
+
+            # Calling send_help_message() function to send the help
+            send_help_message()
+
+            # Message sent successfully
+            print "You just sent a message to help your friend! "
+
+            # Creating new chat
+            new_chat = ChatMessage(secret_text, False)
+            # Appending to chats
+            friends[sender].chats.append(new_chat)
+
+        # If there is no emergency messages or call for help
+        else:
+            new_chat = ChatMessage(secret_text, False)
+            # Appending
+            friends[sender].chats.append(new_chat)
+            print "Your secret message has been saved.\n"
+
+    # No message found exception
+    except TypeError:
+        print "Nothing to decode from the image...\n Sorry! There is no secret message"
+
+
+
+
+
+
+
+
+
+#===============================================================================
+#read's history of chats
 
 
 def read_chat_history():
@@ -214,14 +275,14 @@ def start_chat(spy_name,spy_age,spy_rating):
             new_friend = add_friend()
             print"you have"  +  str(new_friend) + "of friends"
         elif menu_choice == 3:
-            user_index=select_a_friend()
             send_message()
         elif menu_choice == 4:
             read_message()
         elif menu_choice == 5:
             read_chat_history()
         elif menu_choice == 6:
-            remove_friend()
+           no_of_frnds= remove_friend()
+           print"you have" +str(no_of_frnds) + "friends"
 
         elif menu_choice == 0:
             show_menu = False
@@ -262,7 +323,7 @@ elif spy_exist.upper() == "N":
                 # Authentication is completed
                 print "Authentication Complete. Welcome  %s  Age:  %d  And Rating of: %.2f Proud to have you on board" %(spy.name ,spy.age ,spy.rating )
                 # call the start_chat() function
-                start_chat(spy.name,spy.salutation,spy.age,spy.rating)
+                start_chat(spy.name,spy.age,spy.rating)
 
             #if age is  not valid
             else:

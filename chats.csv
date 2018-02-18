@@ -1,13 +1,4 @@
-sender , message_sent_to , text   , time    , sent_by_me
-Ms. David ,Mr. Hiro,heyy,2018-02-12 20:38:04.681000,True
-Ms. David ,Ms. Shubham Sharma,2929,2018-02-12 20:41:25.715000,True
-Ms. David ,Mr. Himanshu Dohan,save me!,2018-02-15 17:17:59.409000,True
-Ms. David ,Ms. Kaanu,save me please..I'm in danger,2018-02-16 23:58:48.146000,True
-
-
-
-
-
-
-
-
+sender , message_sent_to , message  , time    , sent_by_me
+Mr. vikas,Mr. Sachin Sak,are you made,2018-02-16 19:42:15.742000,True
+Mr. vikas,Mr. Rahul Kumar,sos please save me,2018-02-17 01:08:43.906000,True
+Mr.. Kallu,mr aman,hello bro ,2018-02-17 01:16:38.131000,True

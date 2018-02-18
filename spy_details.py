@@ -1,7 +1,7 @@
 from datetime import datetime
 class Spy:
 
-    def __init__(self,name,age,rating ):
+    def __init__(self,name,age,rating,online ):
         self.name = name
         self.age = age
         self.rating = rating
@@ -9,7 +9,7 @@ class Spy:
         self.chats = []
         self.current_status_message = None
 
-spy = Spy ('mr.David Guetta', 43,4.7)
+spy = Spy ('mr.David Guetta', 43,4.7,True)
 
 
 
